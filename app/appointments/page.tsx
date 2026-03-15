@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useMemo, useState } from 'react';
 import type { AppointmentSlot } from '../../types/appointment';
 import AppointmentCalendar from '../../components/appointment/AppointmentCalendar';
