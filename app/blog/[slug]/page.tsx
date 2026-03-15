@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getBlogBySlug, getBlogs, getRelatedPosts } from '../../../services/blog';
 import { estimateReadingTime } from '../../../lib/blog';
-import { buildMetadata, getSiteUrl } from '../../../lib/seo';
+import { buildMetadata, getSiteUrl, generateSEO } from '../../../lib/seo';
 import Breadcrumbs from '../../../components/seo/Breadcrumbs';
 import BlogToc from '../../../components/blog/BlogToc';
 import BlogContent from '../../../components/blog/BlogContent';
@@ -20,30 +20,16 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getBlogBySlug(params.slug);
-  if (!post) {
-    return {
-      title: 'Blog post not found',
-      description: 'The requested blog post could not be found.',
-    };
-  }
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const post = await getBlog(params.slug)
 
-  const baseUrl = getSiteUrl();
-  const url = `${baseUrl}/blog/${post.slug}`;
-
-  return buildMetadata({
-    title: `${post.title} | Mind Care Counseling`,
-    description: post.metaDescription,
-    url,
-    canonicalUrl: url,
-    images: [{ url: post.coverImage, alt: post.title }],
+  return generateSEO({
+    title: post.title,
+    description: post.meta_description,
+    url: `/blog/${post.slug}`,
     type: 'article',
-    publishedTime: post.publishDate,
-    modifiedTime: post.publishDate,
-    authors: [post.author.name],
-    twitterHandle: post.author.twitterHandle,
-  });
+    publishedTime: post.publish_date
+  })
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
