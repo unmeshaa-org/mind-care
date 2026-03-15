@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import type { BlogPost } from '../../../types/blog';
+import type { BlogPost } from '../../../../types/blog';
 
 export default function EditBlogPage() {
   const router = useRouter();
