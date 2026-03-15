@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createContactMessage } from '../../services/contact';
+import { createContactMessage } from '../../../services/contact';
 
 export async function POST(request: Request) {
   const body = await request.json();
