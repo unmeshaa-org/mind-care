@@ -10,7 +10,7 @@ export type SeoOptions = {
   description: string;
   url: string;
   images?: SeoImage[];
-  type?: 'website' | 'article' | 'profile' | string;
+  type?: 'website' | 'article' | 'profile';
   publishedTime?: string;
   modifiedTime?: string;
   authors?: string[];
