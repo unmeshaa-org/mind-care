@@ -95,7 +95,11 @@ export async function createBlog(post: Partial<BlogPost>) {
     throw new Error(error.message);
   }
 
-  return data?.[0] ? mapRowToPost(data[0]) : null;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  return mapRowToPost(data[0]);
 }
 
 export async function updateBlog(slug: string, updates: Partial<BlogPost>) {
