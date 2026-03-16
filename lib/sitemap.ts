@@ -11,7 +11,7 @@ export type SitemapEntry = {
 export function getSitemapEntries(): SitemapEntry[] {
   const baseUrl = getSiteUrl().replace(/\/$/, '');
 
-  const pages: SitemapEntry[] = [
+  const entry: SitemapEntry[] = [
     { url: `${baseUrl}/`, changefreq: 'daily', priority: 1.0 },
     { url: `${baseUrl}/services`, changefreq: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/blog`, changefreq: 'weekly', priority: 0.8 },
@@ -25,7 +25,7 @@ export function getSitemapEntries(): SitemapEntry[] {
     priority: 0.7,
   }));
 
-  return [...pages, ...blogPosts];
+  return [...entry, ...blogPosts];
 }
 
 export function buildSitemapXml(entries: SitemapEntry[]) {
