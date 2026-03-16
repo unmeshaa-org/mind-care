@@ -72,7 +72,8 @@ export function buildMetadata(options: SeoOptions): Metadata {
 
   if (publishedTime) {
     metadata.openGraph = {
-      ...metadata.openGraph,
+      ...(metadata.openGraph || {}),
+      type: 'article',
       publishedTime,
     };
   }
