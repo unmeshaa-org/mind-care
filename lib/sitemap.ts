@@ -18,10 +18,10 @@ export function getSitemapEntries(): SitemapEntry[] {
     { url: `${baseUrl}/contact`, changefreq: 'monthly', priority: 0.7 },
   ];
 
-  const blogPosts = getAllPosts().map((post) => ({
+  const blogPosts: SitemapEntry[] = getAllPosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastmod: post.publishDate,
-    changefreq: 'monthly',
+    changefreq: 'monthly' as const,
     priority: 0.7,
   }));
 
