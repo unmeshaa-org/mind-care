@@ -37,7 +37,9 @@ function mapRowToPost(row: BlogRow): BlogPost {
       website: row.author_website,
     },
     tags: row.tags,
-    content: row.content,
+    content: typeof row.content === 'string' 
+    ? JSON.parse(row.content) 
+    : row.content ?? [],
   };
 }
 
