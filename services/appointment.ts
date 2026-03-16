@@ -66,7 +66,7 @@ export async function createAppointment(booking: Omit<AppointmentBooking, 'id' |
     .select('*')
     .eq('id', booking.slotId)
     .limit(1)
-    .single();
+    .single() as { data: AppointmentSlot | null; error: any };
 
   if (slotError || !currentSlot) {
     throw new Error('Slot not found');
@@ -84,10 +84,11 @@ export async function createAppointment(booking: Omit<AppointmentBooking, 'id' |
       email: booking.email,
       phone: booking.phone,
     })
-    .single();
+    .select()
+    .single() as { data: { id: string; created_at: string }; error: any };
 
   if (bookingError) {
-    throw new Error(bookingError.message);
+    throw new Error('Failed to create booking');
   }
 
   const { error: updateError } = await supabase
