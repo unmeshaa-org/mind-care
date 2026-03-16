@@ -38,10 +38,15 @@ export async function createContactMessage(message: Omit<ContactMessage, 'id' | 
     email: message.email,
     phone: message.phone,
     message: message.message,
-  });
+  })
+  .select();
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error('Insert failed');
   }
 
   const inserted = data?.[0];
