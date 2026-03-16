@@ -1,9 +1,26 @@
 import { supabase } from './supabaseClient';
 import type { BlogPost } from '../types/blog';
 
+type BlogRow = {
+  id: string;
+  title: string;
+  slug: string;
+  cover_image?: string;
+  meta_description?: string;
+  publish_date?: string;
+  published: boolean;
+  author_name?: string;
+  author_bio?: string;
+  author_avatar_url?: string;
+  author_twitter_handle?: string;
+  author_website?: string;
+  tags?: string[];
+  content?: string;
+};
+
 const TABLE = 'blogs';
 
-function mapRowToPost(row: any): BlogPost {
+function mapRowToPost(row: BlogRow): BlogPost {
   return {
     id: row.id,
     title: row.title,
@@ -37,13 +54,13 @@ export async function getBlogs(publishedOnly = true): Promise<BlogPost[]> {
     console.error('Supabase getBlogs error', error);
     return [];
   }
-  return (data || []).map(mapRowToPost);
+  return (data ?? []).map((row: BlogRow) => mapRowToPost(row));
 }
 
 export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   if (!supabase) return null;
 
-  const { data, error } = await supabase.from(TABLE).select('*').eq('slug', slug).limit(1).single();
+  const { data, error } = await supabase.from(TABLE).select('*').eq('slug', slug).limit(1).single() as { data: BlogRow | null; error: any };
   if (error) {
     console.error('Supabase getBlogBySlug error', error);
     return null;
@@ -69,13 +86,15 @@ export async function getRelatedPosts(slug: string, max = 3): Promise<BlogPost[]
     return [];
   }
 
-  return (data || []).map(mapRowToPost);
+  return (data ?? []).map((row: BlogRow) => mapRowToPost(row));
 }
 
 export async function createBlog(post: Partial<BlogPost>) {
   if (!supabase) throw new Error('Supabase is not available');
 
-  const { data, error } = await supabase.from(TABLE).insert({
+  const { data, error } = await supabase
+  .from(TABLE)
+  .insert({
     title: post.title,
     slug: post.slug,
     cover_image: post.coverImage,
@@ -89,7 +108,8 @@ export async function createBlog(post: Partial<BlogPost>) {
     author_website: post.author?.website,
     tags: post.tags,
     content: post.content,
-  });
+  })
+  .select();
 
   if (error) {
     throw new Error(error.message);
@@ -99,7 +119,7 @@ export async function createBlog(post: Partial<BlogPost>) {
     return null;
   }
 
-  return mapRowToPost(data[0]);
+  return mapRowToPost(data[0] as BlogRow);
 }
 
 export async function updateBlog(slug: string, updates: Partial<BlogPost>) {
@@ -122,7 +142,8 @@ export async function updateBlog(slug: string, updates: Partial<BlogPost>) {
       content: updates.content,
     })
     .eq('slug', slug)
-    .single();
+    .select()
+    .single() as { data: BlogRow | null; error: any };
 
   if (error) {
     throw new Error(error.message);
