@@ -10,8 +10,7 @@ type SlotRow = {
   id: string;
   start: string;
   end: string;
-  capacity: number;
-  booked: number;
+  is_booked: boolean;
 };
 
 type AppointmentRow = {
@@ -33,7 +32,7 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
     const { data, error } = await supabase
       .from(SLOTS_TABLE)
       .select('*')
-      .gte('capacity', 1)
+      .eq('is_booked', false)
       .gte('end', now)
       .order('start', { ascending: true });
 
@@ -46,8 +45,7 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
       id: slot.id,
       start: slot.start,
       end: slot.end,
-      capacity: slot.capacity,
-      booked: slot.booked,
+      isBooked: slot.is_booked,
     }));
   } catch (error) {
     console.error('getAvailableSlots error', error);
@@ -58,7 +56,7 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
 /* ---------- Create Slot ---------- */
 
 export async function createSlot(
-  slot: Omit<AppointmentSlot, 'id' | 'booked'>
+  slot: Omit<AppointmentSlot, 'id' | 'isBooked'>
 ): Promise<AppointmentSlot> {
   if (!supabase) {
     console.error('Supabase is not available');
@@ -66,8 +64,7 @@ export async function createSlot(
       id: 'temp-id',
       start: slot.start,
       end: slot.end,
-      capacity: slot.capacity,
-      booked: 0,
+      isBooked: false,
     };
   }
 
@@ -76,8 +73,7 @@ export async function createSlot(
     .insert({
       start: slot.start,
       end: slot.end,
-      capacity: slot.capacity,
-      booked: 0,
+      is_booked: false,
     })
     .select()
     .single();
@@ -92,8 +88,7 @@ export async function createSlot(
     id: row.id,
     start: row.start,
     end: row.end,
-    capacity: row.capacity,
-    booked: row.booked,
+    isBooked: row.is_booked,
   };
 }
 
@@ -152,7 +147,7 @@ export async function createAppointment(
 
   const slot = currentSlot as SlotRow;
 
-  if (slot.booked >= slot.capacity) {
+  if (slot.is_booked) {
     throw new Error('Slot is full');
   }
 
@@ -177,7 +172,7 @@ export async function createAppointment(
   /* Update slot count */
   const { error: updateError } = await supabase
     .from(SLOTS_TABLE)
-    .update({ booked: slot.booked + 1 })
+    .update({ is_booked: true })
     .eq('id', booking.slotId);
 
   if (updateError) {

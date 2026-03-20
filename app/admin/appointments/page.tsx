@@ -11,7 +11,6 @@ export default function AdminAppointmentsPage() {
   const [slotDate, setSlotDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('10:00');
-  const [capacity, setCapacity] = useState(3);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +56,7 @@ export default function AdminAppointmentsPage() {
       const res = await fetch('/api/admin/slots', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ start, end, capacity }),
+        body: JSON.stringify({ start, end }),
       });
 
       const data = await res.json();
@@ -70,7 +69,6 @@ export default function AdminAppointmentsPage() {
       setSlotDate(new Date().toISOString().slice(0, 10));
       setStartTime('09:00');
       setEndTime('10:00');
-      setCapacity(3);
       loadSlots();
     } catch (err) {
       setMessage('Unable to create slot.');
@@ -130,17 +128,6 @@ export default function AdminAppointmentsPage() {
               </label>
             </div>
 
-            <label className="flex flex-col gap-2 text-sm">
-            Capacity
-            <input
-                type="number"
-                value={capacity}
-                min={1}
-                onChange={(e) => setCapacity(Number(e.target.value))}
-                className="rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
-            />
-            </label>
-
             <button
             type="submit"
             className="rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
@@ -161,7 +148,7 @@ export default function AdminAppointmentsPage() {
                 {new Date(slot.start).toLocaleString()} - {new Date(slot.end).toLocaleTimeString()}
                 </p>
                 <p className="text-sm text-slate-600">
-                {slot.booked ?? 0} / {slot.capacity} booked
+                {slot.isBooked ? 'Status: Booked' : 'Status: Available'}
                 </p>
             </li>
             ))}

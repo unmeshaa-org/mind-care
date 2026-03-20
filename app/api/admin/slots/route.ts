@@ -16,13 +16,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { start, end, capacity } = body;
+    const { start, end } = body;
 
-    if (!start || !end || !capacity) {
+    if (!start || !end) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
-    const slot = await createSlot({ start, end, capacity });
+    const slot = await createSlot({ start, end });
     return NextResponse.json(slot);
   } catch (error) {
     console.error("POST /slots error:", error);

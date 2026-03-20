@@ -8,14 +8,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const payload = await request.json();
-  const { start, end, capacity } = payload;
+  const { start, end } = payload;
 
-  if (!start || !end || !capacity) {
+  if (!start || !end) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
 
   try {
-    const slot = await createSlot({ start, end, capacity });
+    const slot = await createSlot({ start, end });
     return NextResponse.json(slot);
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });

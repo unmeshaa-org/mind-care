@@ -2,8 +2,7 @@ export type AppointmentSlot = {
   id: string;
   start: string; // ISO timestamp
   end: string; // ISO timestamp
-  capacity: number;
-  booked?: number;
+  isBooked?: boolean;
 };
 
 export type AppointmentBooking = {

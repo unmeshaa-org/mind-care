@@ -79,7 +79,7 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
               const id = e.target.value;
               setSelectedSlotIdLocal(id);
               const slot = selectedDateGroup.slots.find((s) => s.id === id);
-              if (slot && (slot.booked ?? 0) < slot.capacity) {
+              if (slot && !slot.isBooked) {
                 onSelect(slot);
               }
             }}
@@ -91,11 +91,11 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
             {selectedDateGroup.slots.map((slot) => {
               const start = new Date(slot.start);
               const end = new Date(slot.end);
-              const isFull = (slot.booked ?? 0) >= slot.capacity;
+              const isFull = slot.isBooked;
               return (
                 <option key={slot.id} value={slot.id} disabled={isFull}>
                   {start.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} - {end.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-                  {isFull ? ' (Full)' : ` (${slot.capacity - (slot.booked ?? 0)} slots)`}
+                  {isFull ? ' (Full)' : ' (Available)'}
                 </option>
               );
             })}

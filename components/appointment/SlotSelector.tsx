@@ -28,7 +28,7 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
   }, []);
 
   const availableSlots = useMemo(() => {
-    return slots.filter((slot) => (slot.booked ?? 0) < slot.capacity);
+    return slots.filter((slot) => !slot.isBooked);
   }, [slots]);
 
   if (loading) {
@@ -76,7 +76,7 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-slate-900">{label}</span>
                   <span className="text-xs text-slate-500">
-                    {slot.capacity - (slot.booked ?? 0)} spots left
+                    {slot.isBooked ? 'Full' : 'Available'}
                   </span>
                 </div>
               </button>
