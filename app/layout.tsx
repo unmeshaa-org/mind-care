@@ -23,15 +23,11 @@ export default function RootLayout({
       <body className="site-body">
         <Header />
         <main className="site-main">
-            <Suspense fallback={null}>
-                {children}
-            </Suspense>
+          {children}
         </main>
         <Footer />
         <AdSensePlaceholder />
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
+        <GoogleAnalytics />
       </body>
     </html>
   );
