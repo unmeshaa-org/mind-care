@@ -114,31 +114,25 @@ body {
   gap: 1rem;
 }
 
-.theme-switcher {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.theme-switcher__label {
-  font-size: 0.875rem;
-  color: var(--muted);
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.theme-switcher__hint {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.theme-switcher__select {
-  padding: 0.35rem 0.45rem;
+.theme-switcher-button {
   border: 1px solid var(--border);
-  border-radius: 0.35rem;
   background: var(--surface);
   color: var(--foreground);
+  font-size: 1rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.theme-switcher-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .site-nav__toggle {
