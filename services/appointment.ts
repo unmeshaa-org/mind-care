@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabaseAdmin } from './supabaseAdminClient';
 import type { AppointmentBooking, AppointmentSlot } from '../types/appointment';
 
 const SLOTS_TABLE = 'slots';
@@ -27,10 +27,10 @@ type AppointmentRow = {
 
 export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
   try {
-    if (!supabase) return [];
+    if (!supabaseAdmin) return [];
 
     const now = new Date();
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from(SLOTS_TABLE)
       .select('*')
       .eq('is_booked', false)
@@ -65,8 +65,8 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
 export async function createSlot(
   slot: Omit<AppointmentSlot, 'id' | 'isBooked'>
 ): Promise<AppointmentSlot> {
-  if (!supabase) {
-    console.error('Supabase is not available');
+  if (!supabaseAdmin) {
+    console.error('Supabase admin client is not available');
     return {
       id: 'temp-id',
       date: slot.date,
@@ -76,7 +76,7 @@ export async function createSlot(
     };
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from(SLOTS_TABLE)
     .insert({
       date: slot.date,
@@ -105,9 +105,9 @@ export async function createSlot(
 /* ---------- Get Bookings ---------- */
 
 export async function getBookings(): Promise<AppointmentBooking[]> {
-  if (!supabase) return [];
+  if (!supabaseAdmin) return [];
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from(APPOINTMENTS_TABLE)
     .select('*')
     .order('created_at', { ascending: false });
@@ -132,8 +132,8 @@ export async function getBookings(): Promise<AppointmentBooking[]> {
 export async function createAppointment(
   booking: Omit<AppointmentBooking, 'id' | 'createdAt'>
 ): Promise<AppointmentBooking> {
-  if (!supabase) {
-    console.error('Supabase is not available');
+  if (!supabaseAdmin) {
+    console.error('Supabase admin client is not available');
     return {
       id: 'temp-id',
       slotId: booking.slotId,
@@ -145,7 +145,7 @@ export async function createAppointment(
   }
 
   /* Get slot */
-  const { data: currentSlot, error: slotError } = await supabase
+  const { data: currentSlot, error: slotError } = await supabaseAdmin
     .from(SLOTS_TABLE)
     .select('*')
     .eq('id', booking.slotId)
@@ -162,7 +162,7 @@ export async function createAppointment(
   }
 
   /* Insert booking */
-  const { data: bookingData, error: bookingError } = await supabase
+  const { data: bookingData, error: bookingError } = await supabaseAdmin
     .from(APPOINTMENTS_TABLE)
     .insert({
       slot_id: booking.slotId,
@@ -180,7 +180,7 @@ export async function createAppointment(
   const bookingRow = bookingData as AppointmentRow;
 
   /* Update slot count */
-  const { error: updateError } = await supabase
+  const { error: updateError } = await supabaseAdmin
     .from(SLOTS_TABLE)
     .update({ is_booked: true })
     .eq('id', booking.slotId);
