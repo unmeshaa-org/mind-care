@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getBlogs } from '../services/blog';
 import BlogCard from '../components/blog/BlogCard';
+import ServiceStructuredData from '../components/seo/ServiceStructuredData';
 import { buildMetadata, getSiteUrl } from '../lib/seo';
 
 export const dynamic = 'force-static';
@@ -19,15 +20,19 @@ export default async function HomePage() {
   const latestPosts = allPosts.slice(0, 3);
 
   return (
-    <main className="space-y-16">
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-sky-600 to-emerald-500 px-6 py-16 text-white shadow-lg">
+    <>
+      <ServiceStructuredData baseUrl={getSiteUrl()} />
+      <main className="space-y-16">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-500 via-cyan-500 to-indigo-700 px-6 py-20 text-white shadow-2xl">
+        <div className="hero-wave absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
         <div className="container mx-auto flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Psychology Counseling That Meets You Where You Are
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-cyan-100/90">Heart-centered therapy</p>
+            <h1 className="text-4xl font-bold leading-tight sm:text-6xl">
+              MindCare Counseling for emotional balance and growth
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-white/85">
-              Personalized support to help you manage stress, build resilience, and move forward with confidence.
+            <p className="mt-5 text-lg leading-relaxed text-white/95">
+              We support adults with practical, evidence-based therapy from a compassionate, non-judgmental space.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
@@ -37,19 +42,19 @@ export default async function HomePage() {
                 Book an appointment
               </Link>
               <Link
-                href="/blog"
-                className="inline-flex items-center justify-center rounded-full border border-white/40 bg-white/10 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/20"
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-full border border-white/50 bg-white/10 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/20"
               >
-                Read our latest posts
+                Talk to us
               </Link>
             </div>
           </div>
           <div className="max-w-lg">
-            <div className="relative overflow-hidden rounded-3xl bg-white/10 p-6 backdrop-blur">
-              <p className="text-sm text-white/80">
-                “Taking the first step is often the hardest part. We’re here to make it easier — one conversation at a time.”
+            <div className="rounded-[2rem] border border-white/20 bg-white/15 p-8 shadow-lg backdrop-blur-xl">
+              <h3 className="text-xl font-semibold text-white">You’re never alone in this process</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/85">
+                Professional guidance plus tools you can use daily, so you can feel more calm, confident, and clear.
               </p>
-              <p className="mt-4 text-sm font-semibold text-white">— Dr. Maya Perez</p>
             </div>
           </div>
         </div>
@@ -65,38 +70,73 @@ export default async function HomePage() {
             </p>
             <ul className="space-y-3 text-slate-600">
               <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
                 Personalized treatment plans built around your goals.
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
                 A safe, non-judgmental space to explore what matters most.
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
                 Tools for stress, anxiety, relationships, and life transitions.
               </li>
             </ul>
           </div>
-          <div className="rounded-3xl bg-slate-50 p-10 shadow-sm">
+          <div className="rounded-3xl bg-white p-10 shadow-sm border border-slate-200">
             <h3 className="text-2xl font-semibold text-slate-900">Our services</h3>
             <p className="mt-4 text-slate-600">
               We support individuals with a focus on practical skills and meaningful progress.
             </p>
-            <ul className="mt-6 space-y-4">
-              <li className="rounded-xl border border-slate-200 bg-white p-5">
-                <p className="text-sm font-semibold text-slate-900">Individual therapy</p>
-                <p className="mt-1 text-sm text-slate-600">One-on-one support for personal growth and emotional balance.</p>
-              </li>
-              <li className="rounded-xl border border-slate-200 bg-white p-5">
-                <p className="text-sm font-semibold text-slate-900">Stress & anxiety management</p>
-                <p className="mt-1 text-sm text-slate-600">Skills and pacing to feel calmer and more in control.</p>
-              </li>
-              <li className="rounded-xl border border-slate-200 bg-white p-5">
-                <p className="text-sm font-semibold text-slate-900">Mindfulness coaching</p>
-                <p className="mt-1 text-sm text-slate-600">Simple daily practices to support focus, resilience, and presence.</p>
-              </li>
-            </ul>
+            <div className="mt-6 grid gap-4">
+              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">🧘</span>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Individual therapy</p>
+                  <p className="mt-1 text-sm text-slate-600">One-on-one support for personal growth and emotional balance.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">💆</span>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Stress & anxiety management</p>
+                  <p className="mt-1 text-sm text-slate-600">Skills and pacing to feel calmer and more in control.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">🧘‍♂️</span>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Mindfulness coaching</p>
+                  <p className="mt-1 text-sm text-slate-600">Simple daily practices to support focus, resilience, and presence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-16">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-slate-900">How it works</h2>
+          <p className="mt-4 text-lg leading-relaxed text-slate-600">
+            A clear path to change with supportive guidance in every step.
+          </p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">1</div>
+              <h3 className="mt-4 text-xl font-semibold text-slate-900">Initial consultation</h3>
+              <p className="mt-2 text-sm text-slate-600">We listen deeply to your goals and co-create a plan that fits your needs.</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">2</div>
+              <h3 className="mt-4 text-xl font-semibold text-slate-900">Personalized sessions</h3>
+              <p className="mt-2 text-sm text-slate-600">Weekly sessions with practical tools and gentle accountability.</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cyan-50 text-cyan-600">3</div>
+              <h3 className="mt-4 text-xl font-semibold text-slate-900">Sustained growth</h3>
+              <p className="mt-2 text-sm text-slate-600">Build lasting skills so you can manage stress, build resilience, and feel more confident.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -210,5 +250,6 @@ export default async function HomePage() {
         </div>
       </section>
     </main>
+  </>
   );
 }

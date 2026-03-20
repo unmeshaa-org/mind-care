@@ -26,6 +26,13 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <a
+          href="/appointments"
+          className="sticky-booking-btn"
+          aria-label="Book an appointment"
+        >
+          📅 Book a Call
+        </a>
         <AdSensePlaceholder />
         <GoogleAnalytics />
       </body>
