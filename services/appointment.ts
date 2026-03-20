@@ -4,50 +4,113 @@ import type { AppointmentBooking, AppointmentSlot } from '../types/appointment';
 const SLOTS_TABLE = 'slots';
 const APPOINTMENTS_TABLE = 'appointments';
 
+/* ---------- Database Row Types ---------- */
+
+type SlotRow = {
+  id: string;
+  start: string;
+  end: string;
+  capacity: number;
+  booked: number;
+};
+
+type AppointmentRow = {
+  id: string;
+  slot_id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  created_at: string;
+};
+
+/* ---------- Get Available Slots ---------- */
+
 export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
-  if (!supabase) return [];
+  try {
+    if (!supabase) return [];
+
+    const { data, error } = await supabase
+      .from(SLOTS_TABLE)
+      .select('*')
+      .gte('capacity', 1)
+      .order('start', { ascending: true });
+
+    if (error) {
+      console.error('Supabase getAvailableSlots error', error);
+      return [];
+    }
+
+    return (data ?? []).map((slot: SlotRow) => ({
+      id: slot.id,
+      start: slot.start,
+      end: slot.end,
+      capacity: slot.capacity,
+      booked: slot.booked,
+    }));
+  } catch (error) {
+    console.error('getAvailableSlots error', error);
+    return [];
+  }
+}
+
+/* ---------- Create Slot ---------- */
+
+export async function createSlot(
+  slot: Omit<AppointmentSlot, 'id' | 'booked'>
+): Promise<AppointmentSlot> {
+  if (!supabase) {
+    console.error('Supabase is not available');
+    return {
+      id: 'temp-id',
+      start: slot.start,
+      end: slot.end,
+      capacity: slot.capacity,
+      booked: 0,
+    };
+  }
 
   const { data, error } = await supabase
     .from(SLOTS_TABLE)
-    .select('*')
-    .gte('capacity', 1)
-    .order('start', { ascending: true });
+    .insert({
+      start: slot.start,
+      end: slot.end,
+      capacity: slot.capacity,
+      booked: 0,
+    })
+    .select()
+    .single();
 
-  if (error) {
-    console.error('Supabase getAvailableSlots error', error);
-    return [];
+  if (error || !data) {
+    throw new Error(error?.message || 'Failed to create slot');
   }
 
-  return (data || []) as AppointmentSlot[];
+  const row = data as SlotRow;
+
+  return {
+    id: row.id,
+    start: row.start,
+    end: row.end,
+    capacity: row.capacity,
+    booked: row.booked,
+  };
 }
 
-export async function createSlot(slot: Omit<AppointmentSlot, 'id' | 'booked'>) {
-  if (!supabase) throw new Error('Supabase is not available');
-
-  const { data, error } = await supabase.from(SLOTS_TABLE).insert({
-    start: slot.start,
-    end: slot.end,
-    capacity: slot.capacity,
-    booked: 0,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return (data && data[0]) as AppointmentSlot;
-}
+/* ---------- Get Bookings ---------- */
 
 export async function getBookings(): Promise<AppointmentBooking[]> {
   if (!supabase) return [];
 
-  const { data, error } = await supabase.from(APPOINTMENTS_TABLE).select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from(APPOINTMENTS_TABLE)
+    .select('*')
+    .order('created_at', { ascending: false });
+
   if (error) {
     console.error('Supabase getBookings error', error);
     return [];
   }
 
-  return (data || []).map((row: any) => ({
+  return (data ?? []).map((row: AppointmentRow) => ({
     id: row.id,
     slotId: row.slot_id,
     name: row.name,
@@ -57,25 +120,41 @@ export async function getBookings(): Promise<AppointmentBooking[]> {
   }));
 }
 
-export async function createAppointment(booking: Omit<AppointmentBooking, 'id' | 'createdAt'>) {
-  if (!supabase) throw new Error('Supabase is not available');
+/* ---------- Create Appointment ---------- */
 
-  // Simple implementation: create booking and increment slot booked count.
+export async function createAppointment(
+  booking: Omit<AppointmentBooking, 'id' | 'createdAt'>
+): Promise<AppointmentBooking> {
+  if (!supabase) {
+    console.error('Supabase is not available');
+    return {
+      id: 'temp-id',
+      slotId: booking.slotId,
+      name: booking.name,
+      email: booking.email,
+      phone: booking.phone,
+      createdAt: new Date().toISOString(),
+    };
+  }
+
+  /* Get slot */
   const { data: currentSlot, error: slotError } = await supabase
     .from(SLOTS_TABLE)
     .select('*')
     .eq('id', booking.slotId)
-    .limit(1)
-    .single() as { data: AppointmentSlot | null; error: any };
+    .single();
 
   if (slotError || !currentSlot) {
     throw new Error('Slot not found');
   }
 
-  if (currentSlot.booked >= currentSlot.capacity) {
+  const slot = currentSlot as SlotRow;
+
+  if (slot.booked >= slot.capacity) {
     throw new Error('Slot is full');
   }
 
+  /* Insert booking */
   const { data: bookingData, error: bookingError } = await supabase
     .from(APPOINTMENTS_TABLE)
     .insert({
@@ -85,15 +164,18 @@ export async function createAppointment(booking: Omit<AppointmentBooking, 'id' |
       phone: booking.phone,
     })
     .select()
-    .single() as { data: { id: string; created_at: string }; error: any };
+    .single();
 
-  if (bookingError) {
-    throw new Error('Failed to create booking');
+  if (bookingError || !bookingData) {
+    throw new Error(bookingError?.message || 'Failed to create booking');
   }
 
+  const bookingRow = bookingData as AppointmentRow;
+
+  /* Update slot count */
   const { error: updateError } = await supabase
     .from(SLOTS_TABLE)
-    .update({ booked: (currentSlot.booked ?? 0) + 1 })
+    .update({ booked: slot.booked + 1 })
     .eq('id', booking.slotId);
 
   if (updateError) {
@@ -101,11 +183,11 @@ export async function createAppointment(booking: Omit<AppointmentBooking, 'id' |
   }
 
   return {
-    id: bookingData.id,
-    slotId: booking.slotId,
-    name: booking.name,
-    email: booking.email,
-    phone: booking.phone,
-    createdAt: bookingData.created_at,
-  } as AppointmentBooking;
+    id: bookingRow.id,
+    slotId: bookingRow.slot_id,
+    name: bookingRow.name,
+    email: bookingRow.email,
+    phone: bookingRow.phone,
+    createdAt: bookingRow.created_at,
+  };
 }

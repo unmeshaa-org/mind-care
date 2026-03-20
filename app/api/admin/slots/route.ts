@@ -1,23 +1,31 @@
 import { NextResponse } from 'next/server';
 import { createSlot, getAvailableSlots } from '../../../../services/appointment';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
-  const slots = await getAvailableSlots();
-  return NextResponse.json(slots);
+  try {
+    const slots = await getAvailableSlots();
+    return NextResponse.json(slots ?? []);
+  } catch (error) {
+    console.error("GET /slots error:", error);
+    return NextResponse.json([], { status: 200 });
+  }
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { start, end, capacity } = body;
-
-  if (!start || !end || !capacity) {
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
-  }
-
   try {
+    const body = await request.json();
+    const { start, end, capacity } = body;
+
+    if (!start || !end || !capacity) {
+      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    }
+
     const slot = await createSlot({ start, end, capacity });
     return NextResponse.json(slot);
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+    console.error("POST /slots error:", error);
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 400 });
   }
 }

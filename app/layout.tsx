@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
+import { Suspense } from "react";
 
 import Header from '../components/ui/Header';
 import Footer from '../components/ui/Footer';
@@ -22,11 +23,15 @@ export default function RootLayout({
       <body className="site-body">
         <Header />
         <main className="site-main">
-          {children}
+            <Suspense fallback={null}>
+                {children}
+            </Suspense>
         </main>
         <Footer />
         <AdSensePlaceholder />
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
       </body>
     </html>
   );
