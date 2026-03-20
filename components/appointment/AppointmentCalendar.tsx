@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { AppointmentSlot } from '../../types/appointment';
 
 type Props = {
@@ -10,79 +10,105 @@ type Props = {
 };
 
 export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }: Props) {
-  const sortedSlots = useMemo(() => {
-    return [...slots].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
-  }, [slots]);
+  const now = useMemo(() => new Date(), []);
+  const futureSlots = useMemo(() => {
+    return slots
+      .filter((slot) => new Date(slot.end).getTime() > now.getTime())
+      .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+  }, [slots, now]);
 
-  const groupedByDay = useMemo(() => {
-    return sortedSlots.reduce<Record<string, AppointmentSlot[]>>((acc, slot) => {
-      const date = new Date(slot.start).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(slot);
+  const groupedByIsoDate = useMemo(() => {
+    return futureSlots.reduce<Record<string, AppointmentSlot[]>>((acc, slot) => {
+      const isoDate = slot.start.slice(0, 10);
+      if (!acc[isoDate]) acc[isoDate] = [];
+      acc[isoDate].push(slot);
       return acc;
     }, {});
-  }, [sortedSlots]);
+  }, [futureSlots]);
 
-  const days = Object.keys(groupedByDay);
-  const [activeDay, setActiveDay] = useState(days[0] ?? '');
+  const dateOptions = useMemo(() => {
+    return Object.keys(groupedByIsoDate).map((isoDate) => ({
+      isoDate,
+      label: new Date(isoDate).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }),
+      slots: groupedByIsoDate[isoDate],
+    }));
+  }, [groupedByIsoDate]);
+
+  const [selectedDate, setSelectedDate] = useState(dateOptions[0]?.isoDate ?? '');
+  const [selectedSlotIdLocal, setSelectedSlotIdLocal] = useState<string | undefined>(selectedSlotId);
+
+  useEffect(() => {
+    if (!selectedDate && dateOptions.length > 0) {
+      setSelectedDate(dateOptions[0].isoDate);
+    } else if (selectedDate && !dateOptions.find((option) => option.isoDate === selectedDate)) {
+      setSelectedDate(dateOptions[0]?.isoDate ?? '');
+    }
+  }, [dateOptions, selectedDate]);
+
+  useEffect(() => {
+    setSelectedSlotIdLocal(selectedSlotId);
+  }, [selectedSlotId]);
+
+  const selectedDateGroup = dateOptions.find((option) => option.isoDate === selectedDate);
+
+  if (!selectedDateGroup) {
+    return <p className="text-sm text-slate-600">No available future slots. Admin will add more soon.</p>;
+  }
+
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-2">
-        {days.map((day) => (
-          <button
-            key={day}
-            type="button"
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-              day === activeDay
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-            onClick={() => setActiveDay(day)}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-2 text-sm">
+          <span className="flex items-center gap-2 font-medium">📅 Date</span>
+          <input
+            type="date"
+            value={selectedDate}
+            min={todayIso}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500"
+          />
+        </label>
+
+        <label className="flex flex-col gap-2 text-sm">
+          <span className="flex items-center gap-2 font-medium">🕒 Time</span>
+          <select
+            value={selectedSlotIdLocal ?? ''}
+            onChange={(e) => {
+              const id = e.target.value;
+              setSelectedSlotIdLocal(id);
+              const slot = selectedDateGroup.slots.find((s) => s.id === id);
+              if (slot && (slot.booked ?? 0) < slot.capacity) {
+                onSelect(slot);
+              }
+            }}
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500"
           >
-            {day}
-          </button>
-        ))}
+            <option value="" disabled>
+              Select time slot
+            </option>
+            {selectedDateGroup.slots.map((slot) => {
+              const start = new Date(slot.start);
+              const end = new Date(slot.end);
+              const isFull = (slot.booked ?? 0) >= slot.capacity;
+              return (
+                <option key={slot.id} value={slot.id} disabled={isFull}>
+                  {start.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} - {end.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                  {isFull ? ' (Full)' : ` (${slot.capacity - (slot.booked ?? 0)} slots)`}
+                </option>
+              );
+            })}
+          </select>
+        </label>
       </div>
 
-      <div className="space-y-3">
-        {(groupedByDay[activeDay] || []).map((slot) => {
-          const start = new Date(slot.start);
-          const end = new Date(slot.end);
-          const isSelected = slot.id === selectedSlotId;
-          const isFull = (slot.booked ?? 0) >= slot.capacity;
-
-          return (
-            <button
-              key={slot.id}
-              type="button"
-              onClick={() => onSelect(slot)}
-              disabled={isFull}
-              className={`w-full rounded-xl border px-4 py-4 text-left transition ${
-                isSelected
-                  ? 'border-indigo-600 bg-indigo-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
-              } ${isFull ? 'cursor-not-allowed opacity-60' : ''}`}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">
-                    {start.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} -
-                    {end.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    {slot.capacity - (slot.booked ?? 0)} spots available
-                  </p>
-                </div>
-                {isFull ? (
-                  <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-600">
-                    Full
-                  </span>
-                ) : null}
-              </div>
-            </button>
-          );
-        })}
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        {selectedSlotIdLocal ? (
+          <p className="text-sm text-slate-700">Selected slot: {new Date(selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.start || '').toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</p>
+        ) : (
+          <p className="text-sm text-slate-600">Choose a date and a time to proceed with booking.</p>
+        )}
       </div>
     </div>
   );

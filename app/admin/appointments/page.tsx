@@ -8,8 +8,9 @@ export const dynamic = 'force-dynamic';
 
 export default function AdminAppointmentsPage() {
   const [slots, setSlots] = useState<AppointmentSlot[]>([]);
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
+  const [slotDate, setSlotDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('10:00');
   const [capacity, setCapacity] = useState(3);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,19 @@ export default function AdminAppointmentsPage() {
   async function handleCreateSlot(event: React.FormEvent) {
     event.preventDefault();
 
+    const start = `${slotDate}T${startTime}:00`;
+    const end = `${slotDate}T${endTime}:00`;
+
+    if (new Date(start).getTime() >= new Date(end).getTime()) {
+      setMessage('End time must be after start time.');
+      return;
+    }
+
+    if (new Date(start).getTime() <= Date.now()) {
+      setMessage('Please choose a future start date/time.');
+      return;
+    }
+
     try {
       const res = await fetch('/api/admin/slots', {
         method: 'POST',
@@ -53,8 +67,9 @@ export default function AdminAppointmentsPage() {
       }
 
       setMessage(`Created slot on ${new Date(data.start).toLocaleString()}`);
-      setStart('');
-      setEnd('');
+      setSlotDate(new Date().toISOString().slice(0, 10));
+      setStartTime('09:00');
+      setEndTime('10:00');
       setCapacity(3);
       loadSlots();
     } catch (err) {
@@ -77,23 +92,44 @@ export default function AdminAppointmentsPage() {
         <h2 className="text-2xl font-semibold text-slate-900">Create a new slot</h2>
         <div className="mt-6 grid gap-4">
             <label className="flex flex-col gap-2 text-sm">
-            Start (ISO format)
+            <span className="flex items-center gap-2 font-medium">
+              <span aria-hidden="true">📅</span> Date
+            </span>
             <input
-                value={start}
-                onChange={(e) => setStart(e.target.value)}
-                placeholder="2026-03-15T14:00:00"
+                type="date"
+                value={slotDate}
+                min={new Date().toISOString().slice(0, 10)}
+                onChange={(e) => setSlotDate(e.target.value)}
                 className="rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
             />
             </label>
-            <label className="flex flex-col gap-2 text-sm">
-            End (ISO format)
-            <input
-                value={end}
-                onChange={(e) => setEnd(e.target.value)}
-                placeholder="2026-03-15T15:00:00"
-                className="rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
-            />
-            </label>
+
+            <div className="grid grid-cols-2 gap-4">
+              <label className="flex flex-col gap-2 text-sm">
+                <span className="flex items-center gap-2 font-medium">
+                  <span aria-hidden="true">🕒</span> Start time
+                </span>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                />
+              </label>
+
+              <label className="flex flex-col gap-2 text-sm">
+                <span className="flex items-center gap-2 font-medium">
+                  <span aria-hidden="true">🕒</span> End time
+                </span>
+                <input
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                />
+              </label>
+            </div>
+
             <label className="flex flex-col gap-2 text-sm">
             Capacity
             <input

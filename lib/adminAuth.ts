@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 
-const SECRET = process.env.ADMIN_SECRET || process.env.NEXTAUTH_SECRET || '';
+const SECRET =
+  process.env.ADMIN_SECRET ||
+  process.env.NEXTAUTH_SECRET ||
+  (process.env.NODE_ENV !== 'production' ? 'dev-admin-session-secret' : '');
 const COOKIE_NAME = 'admin_session';
 const TOKEN_VALIDITY_SECONDS = 60 * 60 * 24; // 24 hours
 

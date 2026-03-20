@@ -29,10 +29,12 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
   try {
     if (!supabase) return [];
 
+    const now = new Date().toISOString();
     const { data, error } = await supabase
       .from(SLOTS_TABLE)
       .select('*')
       .gte('capacity', 1)
+      .gte('end', now)
       .order('start', { ascending: true });
 
     if (error) {

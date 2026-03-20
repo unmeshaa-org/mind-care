@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { createAdminToken } from '../../../../lib/adminAuth';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const DEFAULT_ADMIN_EMAIL = 'admin@mindcare.local';
+const DEFAULT_ADMIN_PASSWORD = 'supersecret';
+
+const ADMIN_EMAIL =
+  process.env.ADMIN_EMAIL ||
+  process.env.ADMIN_USERNAME ||
+  (process.env.NODE_ENV !== 'production' ? DEFAULT_ADMIN_EMAIL : '');
+const ADMIN_PASSWORD =
+  process.env.ADMIN_PASSWORD ||
+  (process.env.NODE_ENV !== 'production' ? DEFAULT_ADMIN_PASSWORD : '');
 
 export async function POST(request: Request) {
   const body = await request.json();

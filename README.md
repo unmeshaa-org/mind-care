@@ -30,9 +30,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 
 # Admin Dashboard
-ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@mindcare.local
 ADMIN_PASSWORD=supersecret
-ADMIN_SESSION_SECRET=some-long-random-string
+ADMIN_SECRET=some-long-random-string
+# optionally for username alias
+ADMIN_USERNAME=admin
 
 # Google Analytics
 NEXT_PUBLIC_GA_TRACKING_ID=G-XXXXXXXXXX
@@ -164,7 +166,12 @@ NEXT_PUBLIC_ADSENSE_SLOT=XXXXXXXXXX
 
 ## 🧩 Admin Dashboard
 
-- Visit `/admin` and log in with your `ADMIN_USERNAME`/`ADMIN_PASSWORD`.
+- Visit `/admin` and log in with your `ADMIN_EMAIL` (or `ADMIN_USERNAME`) and `ADMIN_PASSWORD`.
+- In local development, defaults are:
+  - `ADMIN_EMAIL=admin@mindcare.local`
+  - `ADMIN_PASSWORD=supersecret`
+  - `ADMIN_SECRET=dev-admin-session-secret`
+- In production, set secure environment variables in Vercel/hosting.
 - Manage blog posts, appointment slots, and view messages/appointments.
 
 ---
