@@ -29,7 +29,11 @@ export default function AppointmentsPage() {
   }, []);
 
   const sortedSlots = useMemo(() => {
-    return [...slots].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+    return [...slots].sort((a, b) => {
+      const aDate = new Date(`${a.date}T${a.startTime}`);
+      const bDate = new Date(`${b.date}T${b.startTime}`);
+      return aDate.getTime() - bDate.getTime();
+    });
   }, [slots]);
 
   return (

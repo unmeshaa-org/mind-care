@@ -1,7 +1,8 @@
 export type AppointmentSlot = {
   id: string;
-  start: string; // ISO timestamp
-  end: string; // ISO timestamp
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:MM:SS
+  endTime: string; // HH:MM:SS
   isBooked?: boolean;
 };
 

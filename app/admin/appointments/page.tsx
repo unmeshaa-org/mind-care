@@ -56,7 +56,7 @@ export default function AdminAppointmentsPage() {
       const res = await fetch('/api/admin/slots', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ start, end }),
+        body: JSON.stringify({ date: slotDate, startTime, endTime }),
       });
 
       const data = await res.json();
@@ -65,7 +65,7 @@ export default function AdminAppointmentsPage() {
         return;
       }
 
-      setMessage(`Created slot on ${new Date(data.start).toLocaleString()}`);
+      setMessage(`Created slot on ${new Date(`${data.date}T${data.startTime}`).toLocaleString()}`);
       setSlotDate(new Date().toISOString().slice(0, 10));
       setStartTime('09:00');
       setEndTime('10:00');
@@ -145,7 +145,7 @@ export default function AdminAppointmentsPage() {
             {slots.map((slot) => (
             <li key={slot.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                 <p className="text-sm font-semibold text-slate-900">
-                {new Date(slot.start).toLocaleString()} - {new Date(slot.end).toLocaleTimeString()}
+                {new Date(`${slot.date}T${slot.startTime}`).toLocaleString()} - {new Date(`${slot.date}T${slot.endTime}`).toLocaleTimeString()}
                 </p>
                 <p className="text-sm text-slate-600">
                 {slot.isBooked ? 'Status: Booked' : 'Status: Available'}

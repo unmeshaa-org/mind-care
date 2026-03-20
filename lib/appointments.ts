@@ -4,14 +4,16 @@ import { AppointmentBooking, AppointmentSlot } from '../types/appointment';
 let slots: AppointmentSlot[] = [
   {
     id: 'slot-1',
-    start: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    end: new Date(Date.now() + 1000 * 60 * 60 * 25).toISOString(),
+    date: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0, 10),
+    startTime: '09:00:00',
+    endTime: '10:00:00',
     isBooked: false,
   },
   {
     id: 'slot-2',
-    start: new Date(Date.now() + 1000 * 60 * 60 * 26).toISOString(),
-    end: new Date(Date.now() + 1000 * 60 * 60 * 27).toISOString(),
+    date: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0, 10),
+    startTime: '10:00:00',
+    endTime: '11:00:00',
     isBooked: true,
   },
 ];

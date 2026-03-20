@@ -56,10 +56,13 @@ export default function BookingForm({ slot, onSuccess }: Props) {
       <p className="text-sm text-slate-600">
         You’re booking the slot on{' '}
         <span className="font-medium">
-          {new Date(slot.start).toLocaleString(undefined, {
+          {new Date(`${slot.date}T${slot.startTime}`).toLocaleString(undefined, {
             weekday: 'long',
             month: 'long',
             day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })} - {new Date(`${slot.date}T${slot.endTime}`).toLocaleTimeString(undefined, {
             hour: '2-digit',
             minute: '2-digit',
           })}

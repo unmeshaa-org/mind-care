@@ -28,7 +28,10 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
   }, []);
 
   const availableSlots = useMemo(() => {
-    return slots.filter((slot) => !slot.isBooked);
+    const now = new Date();
+    return slots
+      .filter((slot) => !slot.isBooked)
+      .filter((slot) => new Date(`${slot.date}T${slot.startTime}`).getTime() > now.getTime());
   }, [slots]);
 
   if (loading) {
@@ -48,8 +51,8 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
       <p className="text-sm font-semibold text-slate-700">Choose an available slot</p>
       <ul className="space-y-2">
         {availableSlots.map((slot) => {
-          const start = new Date(slot.start);
-          const end = new Date(slot.end);
+          const start = new Date(`${slot.date}T${slot.startTime}`);
+          const end = new Date(`${slot.date}T${slot.endTime}`);
           const label = `${start.toLocaleString(undefined, {
             weekday: 'short',
             month: 'short',
@@ -74,7 +77,7 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
                 onClick={() => onSelect(slot)}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-slate-900">{label}</span>
+                          <span className="font-medium text-slate-900">{label}</span>
                   <span className="text-xs text-slate-500">
                     {slot.isBooked ? 'Full' : 'Available'}
                   </span>

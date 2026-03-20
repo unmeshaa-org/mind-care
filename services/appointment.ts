@@ -8,8 +8,9 @@ const APPOINTMENTS_TABLE = 'appointments';
 
 type SlotRow = {
   id: string;
-  start: string;
-  end: string;
+  date: string; // date only
+  start_time: string; // time only
+  end_time: string; // time only
   is_booked: boolean;
 };
 
@@ -28,25 +29,31 @@ export async function getAvailableSlots(): Promise<AppointmentSlot[]> {
   try {
     if (!supabase) return [];
 
-    const now = new Date().toISOString();
+    const now = new Date();
     const { data, error } = await supabase
       .from(SLOTS_TABLE)
       .select('*')
       .eq('is_booked', false)
-      .gte('end', now)
-      .order('start', { ascending: true });
+      .order('date', { ascending: true })
+      .order('start_time', { ascending: true });
 
     if (error) {
       console.error('Supabase getAvailableSlots error', error);
       return [];
     }
 
-    return (data ?? []).map((slot: SlotRow) => ({
-      id: slot.id,
-      start: slot.start,
-      end: slot.end,
-      isBooked: slot.is_booked,
-    }));
+    return (data ?? [])
+      .map((slot: SlotRow) => ({
+        id: slot.id,
+        date: slot.date,
+        startTime: slot.start_time,
+        endTime: slot.end_time,
+        isBooked: slot.is_booked,
+      }))
+      .filter((slot) => {
+        const slotStart = new Date(`${slot.date}T${slot.startTime}`);
+        return slotStart.getTime() > now.getTime();
+      });
   } catch (error) {
     console.error('getAvailableSlots error', error);
     return [];
@@ -62,8 +69,9 @@ export async function createSlot(
     console.error('Supabase is not available');
     return {
       id: 'temp-id',
-      start: slot.start,
-      end: slot.end,
+      date: slot.date,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
       isBooked: false,
     };
   }
@@ -71,8 +79,9 @@ export async function createSlot(
   const { data, error } = await supabase
     .from(SLOTS_TABLE)
     .insert({
-      start: slot.start,
-      end: slot.end,
+      date: slot.date,
+      start_time: slot.startTime,
+      end_time: slot.endTime,
       is_booked: false,
     })
     .select()
@@ -86,8 +95,9 @@ export async function createSlot(
 
   return {
     id: row.id,
-    start: row.start,
-    end: row.end,
+    date: row.date,
+    startTime: row.start_time,
+    endTime: row.end_time,
     isBooked: row.is_booked,
   };
 }

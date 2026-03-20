@@ -13,13 +13,17 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
   const now = useMemo(() => new Date(), []);
   const futureSlots = useMemo(() => {
     return slots
-      .filter((slot) => new Date(slot.end).getTime() > now.getTime())
-      .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+      .filter((slot) => new Date(`${slot.date}T${slot.endTime}`).getTime() > now.getTime())
+      .sort(
+        (a, b) =>
+          new Date(`${a.date}T${a.startTime}`).getTime() -
+          new Date(`${b.date}T${b.startTime}`).getTime(),
+      );
   }, [slots, now]);
 
   const groupedByIsoDate = useMemo(() => {
     return futureSlots.reduce<Record<string, AppointmentSlot[]>>((acc, slot) => {
-      const isoDate = slot.start.slice(0, 10);
+      const isoDate = slot.date;
       if (!acc[isoDate]) acc[isoDate] = [];
       acc[isoDate].push(slot);
       return acc;
@@ -89,8 +93,8 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
               Select time slot
             </option>
             {selectedDateGroup.slots.map((slot) => {
-              const start = new Date(slot.start);
-              const end = new Date(slot.end);
+              const start = new Date(`${slot.date}T${slot.startTime}`);
+              const end = new Date(`${slot.date}T${slot.endTime}`);
               const isFull = slot.isBooked;
               return (
                 <option key={slot.id} value={slot.id} disabled={isFull}>
@@ -105,7 +109,7 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         {selectedSlotIdLocal ? (
-          <p className="text-sm text-slate-700">Selected slot: {new Date(selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.start || '').toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="text-sm text-slate-700">Selected slot: {new Date(`${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.date}T${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.startTime}`).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</p>
         ) : (
           <p className="text-sm text-slate-600">Choose a date and a time to proceed with booking.</p>
         )}
