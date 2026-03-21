@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { Brain, ShieldCheck, UserCheck } from 'lucide-react';
 import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
+import Card, { CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
+import Section from '../components/ui/Section';
 import { getBlogs } from '../services/blog';
 import BlogCard from '../components/blog/BlogCard';
 import ServiceStructuredData from '../components/seo/ServiceStructuredData';
@@ -25,8 +26,9 @@ export default async function HomePage() {
   return (
     <>
       <ServiceStructuredData baseUrl={getSiteUrl()} />
-      <main className="space-y-16">
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 via-violet-600 to-purple-700 px-6 py-16 text-white shadow-2xl sm:py-24">
+      <main>
+      <Section>
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 via-violet-600 to-purple-700 px-6 text-white shadow-2xl">
         <div className="absolute inset-0 -z-10 opacity-30 [mask-image:linear-gradient(to_bottom,rgba(255,255,255,1),rgba(255,255,255,0))]" />
         <div className="container mx-auto grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="space-y-6 lg:max-w-xl">
@@ -73,9 +75,10 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </Section>
 
-      <section className="container mx-auto px-4 py-16">
-        <div className="mx-auto max-w-6xl space-y-8">
+      <Section className="bg-slate-50">
+      <div className="mx-auto max-w-6xl space-y-8">
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Our Services</h2>
             <p className="mt-3 text-lg text-slate-600 sm:text-xl">
@@ -85,33 +88,39 @@ export default async function HomePage() {
 
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <Card>
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
-                <UserCheck className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900">Individual Therapy</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                One-on-one sessions structured to your pace, with tailored tools for long-term growth.
-              </p>
+              <CardHeader>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+                  <UserCheck className="h-6 w-6" />
+                </div>
+                <CardTitle>Individual Therapy</CardTitle>
+                <CardDescription>
+                  One-on-one sessions structured to your pace, with tailored tools for long-term growth.
+                </CardDescription>
+              </CardHeader>
             </Card>
 
             <Card>
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                <ShieldCheck className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900">Stress & Anxiety Support</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Guided techniques for emotional regulation, resilience, and coping with everyday pressure.
-              </p>
+              <CardHeader>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <CardTitle>Stress & Anxiety Support</CardTitle>
+                <CardDescription>
+                  Guided techniques for emotional regulation, resilience, and coping with everyday pressure.
+                </CardDescription>
+              </CardHeader>
             </Card>
 
             <Card>
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
-                <Brain className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900">Mindfulness Coaching</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Practical mind-body habits to strengthen focus, presence, and well-being.
-              </p>
+              <CardHeader>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
+                  <Brain className="h-6 w-6" />
+                </div>
+                <CardTitle>Mindfulness Coaching</CardTitle>
+                <CardDescription>
+                  Practical mind-body habits to strengthen focus, presence, and well-being.
+                </CardDescription>
+              </CardHeader>
             </Card>
           </div>
         </div>
@@ -125,37 +134,42 @@ export default async function HomePage() {
           </p>
         </div>
 
-        <div className="relative mt-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="hidden md:block absolute left-6 right-6 top-1/2 h-0.5 -translate-y-1/2 bg-slate-200" aria-hidden="true" />
-
-          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">1</span>
-            <h3 className="mt-4 text-xl font-semibold text-slate-900">Initial consultation</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              We listen deeply to your goals, understand where you are, and co-create a pathway for healing.
-            </p>
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0 w-16 h-16 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl">1</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-semibold text-slate-900">Initial consultation</h3>
+              <p className="mt-2 text-slate-600">
+                We listen deeply to your goals, understand where you are, and co-create a pathway for healing.
+              </p>
+            </div>
           </div>
 
-          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">2</span>
-            <h3 className="mt-4 text-xl font-semibold text-slate-900">Personalized sessions</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              Weekly sessions with practical, evidence-based tools tailored to your unique needs.
-            </p>
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0 w-16 h-16 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl">2</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-semibold text-slate-900">Personalized sessions</h3>
+              <p className="mt-2 text-slate-600">
+                Weekly sessions with practical, evidence-based tools tailored to your unique needs.
+              </p>
+            </div>
           </div>
 
-          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">3</span>
-            <h3 className="mt-4 text-xl font-semibold text-slate-900">Sustained growth</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              Build confidence and resilience with ongoing support so change lasts.
-            </p>
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0 w-16 h-16 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl">3</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-semibold text-slate-900">Sustained growth</h3>
+              <p className="mt-2 text-slate-600">
+                Build confidence and resilience with ongoing support so change lasts.
+              </p>
+            </div>
           </div>
         </div>
       </section>
+      </Section>
 
-      <section className="bg-slate-50">
-        <div className="container mx-auto px-4 py-16">
+      <Section className="bg-gradient-to-br from-indigo-50 to-purple-50">
+      <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Why counseling matters</h2>
             <p className="mt-4 text-lg leading-relaxed text-slate-600">
@@ -184,8 +198,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </Section>
 
-      <section className="container mx-auto px-4">
+      <Section className="bg-slate-50">
         <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
@@ -220,9 +235,10 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </Section>
 
-      <section className="container mx-auto px-4">
-        <div className="space-y-6">
+      <Section>
+      <div className="space-y-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Latest from the blog</h2>
@@ -245,9 +261,10 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </Section>
 
-      <section className="container mx-auto px-4 py-16">
-        <div className="mx-auto rounded-3xl bg-gradient-to-r from-indigo-700 via-violet-600 to-purple-700 p-8 text-center text-white shadow-xl sm:p-12">
+      <Section>
+      <div className="mx-auto rounded-3xl bg-gradient-to-r from-indigo-700 via-violet-600 to-purple-700 p-8 text-center text-white shadow-xl sm:p-12">
           <h2 className="text-3xl font-bold leading-tight sm:text-4xl">Ready to take the next step?</h2>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
             Start your journey toward balance and wellbeing with a professional session that supports your growth and clarity.
@@ -257,9 +274,10 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
+      </Section>
 
-      <section className="bg-slate-50">
-        <div className="container mx-auto px-4 py-16">
+      <Section className="bg-slate-50">
+      <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Get in touch</h2>
             <p className="mt-4 text-lg leading-relaxed text-slate-600">
@@ -274,6 +292,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </Section>
     </main>
   </>
   );
