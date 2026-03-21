@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Button from '../components/ui/Button';
 import { getBlogs } from '../services/blog';
 import BlogCard from '../components/blog/BlogCard';
 import ServiceStructuredData from '../components/seo/ServiceStructuredData';
@@ -23,38 +24,49 @@ export default async function HomePage() {
     <>
       <ServiceStructuredData baseUrl={getSiteUrl()} />
       <main className="space-y-16">
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-500 via-cyan-500 to-indigo-700 px-6 py-20 text-white shadow-2xl">
-        <div className="hero-wave absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
-        <div className="container mx-auto flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-cyan-100/90">Heart-centered therapy</p>
-            <h1 className="text-4xl font-bold leading-tight sm:text-6xl">
-              MindCare Counseling for emotional balance and growth
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 via-violet-600 to-purple-700 px-6 py-16 text-white shadow-2xl sm:py-24">
+        <div className="absolute inset-0 -z-10 opacity-30 [mask-image:linear-gradient(to_bottom,rgba(255,255,255,1),rgba(255,255,255,0))]" />
+        <div className="container mx-auto grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="space-y-6 lg:max-w-xl">
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-100/80">Heart-centered therapy</p>
+            <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              Clarity, calm, and confidence through guided counseling
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-white/95">
-              We support adults with practical, evidence-based therapy from a compassionate, non-judgmental space.
+            <p className="text-lg leading-relaxed text-white/90 sm:text-xl">
+              Work with a caring psychologist in Pune who helps you reduce stress, build emotional strength, and rediscover balance.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
-                href="/appointments"
-                className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100"
-              >
-                Book an appointment
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link href="/appointments" className="w-full sm:w-auto">
+                <Button variant="primary" className="w-full sm:w-auto">Book a Session</Button>
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-full border border-white/50 bg-white/10 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/20"
-              >
-                Talk to us
+              <Link href="/contact" className="w-full sm:w-auto">
+                <Button variant="secondary" className="w-full sm:w-auto">Talk to Us</Button>
               </Link>
             </div>
+
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="rounded-xl bg-white/15 px-3 py-2 text-center text-xs font-medium text-white/95">
+                ⭐ 4.9 rating
+              </div>
+              <div className="rounded-xl bg-white/15 px-3 py-2 text-center text-xs font-medium text-white/95">
+                🔒 HIPAA-aligned privacy
+              </div>
+              <div className="rounded-xl bg-white/15 px-3 py-2 text-center text-xs font-medium text-white/95">
+                💬 500+ sessions delivered
+              </div>
+            </div>
           </div>
-          <div className="max-w-lg">
-            <div className="rounded-[2rem] border border-white/20 bg-white/15 p-8 shadow-lg backdrop-blur-xl">
-              <h3 className="text-xl font-semibold text-white">You’re never alone in this process</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/85">
-                Professional guidance plus tools you can use daily, so you can feel more calm, confident, and clear.
-              </p>
+
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="absolute -left-12 -top-12 h-44 w-44 rounded-full bg-cyan-400/40 blur-3xl" aria-hidden="true" />
+            <div className="absolute right-0 top-10 h-48 w-48 rounded-full bg-purple-300/40 blur-3xl" aria-hidden="true" />
+            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-10 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+              <div className="flex h-64 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-500/80 p-6 text-center text-white">
+                <p className="text-lg font-semibold sm:text-xl">
+                  Illustration placeholder
+                </p>
+              </div>
             </div>
           </div>
         </div>
