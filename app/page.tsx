@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { Brain, ShieldCheck, UserCheck } from 'lucide-react';
 import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 import { getBlogs } from '../services/blog';
 import BlogCard from '../components/blog/BlogCard';
 import ServiceStructuredData from '../components/seo/ServiceStructuredData';
@@ -72,83 +74,82 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4">
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div className="space-y-6">
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Meet your counselor</h2>
-            <p className="text-lg leading-relaxed text-slate-600">
-              Dr. Maya Perez is a licensed psychologist with over a decade of experience helping people in all stages of life.
-              Her approach blends evidence-based therapy with practical tools you can apply between sessions.
+      <section className="container mx-auto px-4 py-16">
+        <div className="mx-auto max-w-6xl space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Our Services</h2>
+            <p className="mt-3 text-lg text-slate-600 sm:text-xl">
+              Evidence-based programs designed for steady progress and sustainable change.
             </p>
-            <ul className="space-y-3 text-slate-600">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
-                Personalized treatment plans built around your goals.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
-                A safe, non-judgmental space to explore what matters most.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-indigo-500" />
-                Tools for stress, anxiety, relationships, and life transitions.
-              </li>
-            </ul>
           </div>
-          <div className="rounded-3xl bg-white p-10 shadow-sm border border-slate-200">
-            <h3 className="text-2xl font-semibold text-slate-900">Our services</h3>
-            <p className="mt-4 text-slate-600">
-              We support individuals with a focus on practical skills and meaningful progress.
-            </p>
-            <div className="mt-6 grid gap-4">
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">🧘</span>
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">Individual therapy</p>
-                  <p className="mt-1 text-sm text-slate-600">One-on-one support for personal growth and emotional balance.</p>
-                </div>
+
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+                <UserCheck className="h-6 w-6" />
               </div>
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">💆</span>
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">Stress & anxiety management</p>
-                  <p className="mt-1 text-sm text-slate-600">Skills and pacing to feel calmer and more in control.</p>
-                </div>
+              <h3 className="text-xl font-semibold text-slate-900">Individual Therapy</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                One-on-one sessions structured to your pace, with tailored tools for long-term growth.
+              </p>
+            </Card>
+
+            <Card>
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                <ShieldCheck className="h-6 w-6" />
               </div>
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">🧘‍♂️</span>
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">Mindfulness coaching</p>
-                  <p className="mt-1 text-sm text-slate-600">Simple daily practices to support focus, resilience, and presence.</p>
-                </div>
+              <h3 className="text-xl font-semibold text-slate-900">Stress & Anxiety Support</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Guided techniques for emotional regulation, resilience, and coping with everyday pressure.
+              </p>
+            </Card>
+
+            <Card>
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
+                <Brain className="h-6 w-6" />
               </div>
-            </div>
+              <h3 className="text-xl font-semibold text-slate-900">Mindfulness Coaching</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Practical mind-body habits to strengthen focus, presence, and well-being.
+              </p>
+            </Card>
           </div>
         </div>
       </section>
 
       <section className="container mx-auto px-4 py-16">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-slate-900">How it works</h2>
           <p className="mt-4 text-lg leading-relaxed text-slate-600">
-            A clear path to change with supportive guidance in every step.
+            A clear path to change with supportive guidance through every step.
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">1</div>
-              <h3 className="mt-4 text-xl font-semibold text-slate-900">Initial consultation</h3>
-              <p className="mt-2 text-sm text-slate-600">We listen deeply to your goals and co-create a plan that fits your needs.</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">2</div>
-              <h3 className="mt-4 text-xl font-semibold text-slate-900">Personalized sessions</h3>
-              <p className="mt-2 text-sm text-slate-600">Weekly sessions with practical tools and gentle accountability.</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cyan-50 text-cyan-600">3</div>
-              <h3 className="mt-4 text-xl font-semibold text-slate-900">Sustained growth</h3>
-              <p className="mt-2 text-sm text-slate-600">Build lasting skills so you can manage stress, build resilience, and feel more confident.</p>
-            </div>
+        </div>
+
+        <div className="relative mt-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="hidden md:block absolute left-6 right-6 top-1/2 h-0.5 -translate-y-1/2 bg-slate-200" aria-hidden="true" />
+
+          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">1</span>
+            <h3 className="mt-4 text-xl font-semibold text-slate-900">Initial consultation</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              We listen deeply to your goals, understand where you are, and co-create a pathway for healing.
+            </p>
+          </div>
+
+          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">2</span>
+            <h3 className="mt-4 text-xl font-semibold text-slate-900">Personalized sessions</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Weekly sessions with practical, evidence-based tools tailored to your unique needs.
+            </p>
+          </div>
+
+          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold">3</span>
+            <h3 className="mt-4 text-xl font-semibold text-slate-900">Sustained growth</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Build confidence and resilience with ongoing support so change lasts.
+            </p>
           </div>
         </div>
       </section>
@@ -242,6 +243,18 @@ export default async function HomePage() {
               <BlogCard key={post.slug} post={post} />
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-16">
+        <div className="mx-auto rounded-3xl bg-gradient-to-r from-indigo-700 via-violet-600 to-purple-700 p-8 text-center text-white shadow-xl sm:p-12">
+          <h2 className="text-3xl font-bold leading-tight sm:text-4xl">Ready to take the next step?</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
+            Start your journey toward balance and wellbeing with a professional session that supports your growth and clarity.
+          </p>
+          <Link href="/appointments" className="mt-8 inline-flex justify-center">
+            <Button className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Book a Session</Button>
+          </Link>
         </div>
       </section>
 

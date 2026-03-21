@@ -275,21 +275,51 @@ body {
   border-radius: 999px;
   background: linear-gradient(135deg, #4f46e5, #06b6d4);
   color: white;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.25rem;
   font-weight: 700;
-  box-shadow: 0 20px 30px rgba(15, 23, 42, 0.35);
+  font-size: 1rem;
+  min-width: 210px;
+  text-align: center;
+  box-shadow: 0 24px 35px rgba(15, 23, 42, 0.35);
   text-decoration: none;
-  transition: transform 170ms ease, box-shadow 170ms ease, opacity 170ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+  animation: pulse 6s ease-in-out infinite;
 }
 
 .sticky-booking-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 32px rgba(15, 23, 42, 0.45);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.55);
 }
 
 .sticky-booking-btn:focus-visible {
   outline: 3px solid rgba(96, 165, 250, 0.9);
   outline-offset: 2px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.01);
+  }
+}
+
+@media (max-width: 768px) {
+  .sticky-booking-btn {
+    right: 50%;
+    left: auto;
+    transform: translateX(50%);
+    bottom: 1rem;
+    width: min(92%, 340px);
+    min-width: unset;
+    padding: 1rem 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  .site-main {
+    padding-bottom: 5rem;
+  }
 }
 
 /* Responsive */
