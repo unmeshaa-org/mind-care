@@ -6,7 +6,6 @@ import Header from '../components/ui/Header';
 import Footer from '../components/ui/Footer';
 import AdSensePlaceholder from '../components/adsense/AdSensePlaceholder';
 import GoogleAnalytics from '../components/analytics/GoogleAnalytics';
-import StyleProbe from '../components/debug/StyleProbe';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -34,7 +33,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`site-root ${dmSans.variable} ${cormorant.variable}`}>
       <body className="site-body">
-        <StyleProbe />
         <Header />
         <main className="site-main">{children}</main>
         <Footer />
