@@ -2,6 +2,11 @@
 
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import Textarea from '../../components/ui/Textarea';
+import PageHeader from '../../components/ui/PageHeader';
+import SectionContainer from '../../components/ui/SectionContainer';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,117 +47,109 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-16">
-      <h1 className="text-4xl font-semibold text-slate-900">Contact</h1>
-      <p className="mt-6 text-lg text-slate-600">
-        Need to ask a question or schedule a session? Send us a message and we’ll respond within 1 business day.
-      </p>
+    <main>
+      <PageHeader
+        eyebrow="Contact"
+        title="Get in touch"
+        description="Ask a question or tell us how we can help. We aim to respond within one business day."
+      />
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <section className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Send a message</h2>
-          <p className="mt-2 text-slate-600">Fill out the form below and we’ll respond as soon as possible.</p>
-
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-700">
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
-                Phone
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-slate-700">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                required
-                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              />
-            </div>
-
-            {status === 'error' && (
-              <p className="text-sm text-rose-600">{error || 'Something went wrong. Please try again.'}</p>
-            )}
-
-            {status === 'success' && (
-              <p className="text-sm text-emerald-600">Thanks for reaching out! We’ll reply soon.</p>
-            )}
-
-            <button
-              type="submit"
-              disabled={status === 'submitting'}
-              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-indigo-300"
+      <div className="py-14 md:py-20">
+        <SectionContainer>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+            <section
+              className="rounded-2xl border bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)] md:p-10"
+              style={{ borderColor: 'var(--border)' }}
             >
-              {status === 'submitting' ? 'Sending…' : 'Send message'}
-            </button>
-          </form>
-        </section>
+              <h2 className="font-heading text-xl font-semibold text-[var(--foreground)]">Send a message</h2>
+              <p className="mt-2 text-[var(--muted)]">Fill out the form below and we will respond as soon as possible.</p>
 
-        <aside className="space-y-8">
-          <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
-            <h2 className="text-xl font-semibold text-slate-900">Reach out</h2>
-            <p className="mt-2 text-slate-600">
-              Email: <Link href="mailto:hello@mindcare.example.com" className="font-medium text-indigo-600 hover:underline">
-                hello@mindcare.example.com
-              </Link>
-            </p>
-            <p className="mt-1 text-slate-600">Phone: <span className="font-medium">(555) 123-4567</span></p>
-          </div>
+              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                <Input id="name" name="name" label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+                <Textarea
+                  id="message"
+                  name="message"
+                  label="Message"
+                  rows={5}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  required
+                />
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
-            <h2 className="text-xl font-semibold text-slate-900">Location</h2>
-            <p className="mt-2 text-slate-600">
-              123 Wellness Way
-              <br />
-              Suite 100
-              <br />
-              City, State 00000
-            </p>
+                {status === 'error' && (
+                  <p className="text-sm text-red-600">{error || 'Something went wrong. Please try again.'}</p>
+                )}
+
+                {status === 'success' && (
+                  <p className="text-sm text-[var(--primary)]">Thanks for reaching out! We will reply soon.</p>
+                )}
+
+                <Button type="submit" disabled={status === 'submitting'} className="w-full sm:w-auto">
+                  {status === 'submitting' ? 'Sending…' : 'Send message'}
+                </Button>
+              </form>
+            </section>
+
+            <aside className="space-y-8">
+              <div
+                className="rounded-2xl border bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)] md:p-10"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                <h2 className="font-heading text-xl font-semibold text-[var(--foreground)]">Direct contact</h2>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+                  Email:{' '}
+                  <Link
+                    href="mailto:hello@mindcare.example.com"
+                    className="font-semibold text-[var(--primary)] hover:underline"
+                  >
+                    hello@mindcare.example.com
+                  </Link>
+                </p>
+                <p className="mt-2 text-sm text-[var(--muted)]">
+                  Phone: <span className="font-semibold text-[var(--foreground)]">(555) 123-4567</span>
+                </p>
+                <Link
+                  href="/appointments"
+                  className="mt-6 inline-flex text-sm font-semibold text-[var(--primary)] underline-offset-4 hover:underline"
+                >
+                  Prefer to book online? → Appointments
+                </Link>
+              </div>
+
+              <div
+                className="rounded-2xl border bg-[var(--secondary-soft)] p-8 md:p-10"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                <h2 className="font-heading text-xl font-semibold text-[var(--foreground)]">Location</h2>
+                <address className="mt-3 not-italic text-sm leading-relaxed text-[var(--muted)]">
+                  123 Wellness Way
+                  <br />
+                  Suite 100
+                  <br />
+                  City, State 00000
+                </address>
+              </div>
+            </aside>
           </div>
-        </aside>
+        </SectionContainer>
       </div>
     </main>
   );

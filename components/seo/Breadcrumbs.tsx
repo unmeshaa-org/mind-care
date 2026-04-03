@@ -18,10 +18,10 @@ export default function Breadcrumbs({ items, className }: Props) {
 
   return (
     <nav className={className} aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+      <ol className="flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
         {items.map((item, index) => (
           <li key={item.url} className="inline-flex items-center gap-2">
-            <a href={item.url} className="hover:text-slate-900 hover:underline">
+            <a href={item.url} className="hover:text-[var(--foreground)] hover:underline">
               {item.name}
             </a>
             {index < items.length - 1 ? <span aria-hidden="true">/</span> : null}

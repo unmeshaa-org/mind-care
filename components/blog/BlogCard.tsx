@@ -21,23 +21,28 @@ export default function BlogCard({ post }: Props) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-slate-500">Image placeholder</div>
+          <div className="flex h-full items-center justify-center text-sm text-[var(--muted)]">Image placeholder</div>
         )}
       </div>
 
       <div className="p-6">
-        <div className="text-xs text-slate-500">
+        <div className="text-xs text-[var(--muted)]">
           <span>{new Date(post.publishDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           <span className="mx-2">•</span>
           <span>{estimateReadingTime(post)}</span>
         </div>
 
-        <h3 className="mt-3 text-xl font-semibold text-slate-900">{post.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">{post.metaDescription}</p>
+        <h3 className="mt-3 font-heading text-xl font-semibold text-[var(--foreground)]">{post.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{post.metaDescription}</p>
 
         <Link
           href={`/blog/${post.slug}`}
-          className="mt-4 inline-flex items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+          className="mt-4 inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold transition"
+          style={{
+            borderColor: 'var(--primary-soft-strong)',
+            background: 'var(--primary-soft)',
+            color: 'var(--primary)',
+          }}
         >
           Read more
         </Link>

@@ -56,7 +56,7 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
   const selectedDateGroup = dateOptions.find((option) => option.isoDate === selectedDate);
 
   if (!selectedDateGroup) {
-    return <p className="text-sm text-slate-600">No available future slots. Admin will add more soon.</p>;
+    return <p className="text-sm text-[var(--muted)]">No available future slots. Admin will add more soon.</p>;
   }
 
   const todayIso = new Date().toISOString().slice(0, 10);
@@ -71,7 +71,8 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
             value={selectedDate}
             min={todayIso}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500"
+            className="rounded-xl border bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-soft-strong)]"
+            style={{ borderColor: 'var(--border)' }}
           />
         </label>
 
@@ -87,7 +88,8 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
                 onSelect(slot);
               }
             }}
-            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500"
+            className="rounded-xl border bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-soft-strong)]"
+            style={{ borderColor: 'var(--border)' }}
           >
             <option value="" disabled>
               Select time slot
@@ -107,11 +109,16 @@ export default function AppointmentCalendar({ slots, selectedSlotId, onSelect }:
         </label>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="rounded-xl border bg-[var(--surface)] p-4" style={{ borderColor: 'var(--border)' }}>
         {selectedSlotIdLocal ? (
-          <p className="text-sm text-slate-700">Selected slot: {new Date(`${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.date}T${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.startTime}`).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="text-sm text-[var(--foreground)]">
+            Selected slot:{' '}
+            {new Date(
+              `${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.date}T${selectedDateGroup.slots.find((s) => s.id === selectedSlotIdLocal)?.startTime}`,
+            ).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+          </p>
         ) : (
-          <p className="text-sm text-slate-600">Choose a date and a time to proceed with booking.</p>
+          <p className="text-sm text-[var(--muted)]">Choose a date and a time to proceed with booking.</p>
         )}
       </div>
     </div>

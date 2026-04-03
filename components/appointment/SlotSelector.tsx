@@ -35,7 +35,7 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
   }, [slots]);
 
   if (loading) {
-    return <p className="text-sm text-slate-600">Loading available slots...</p>;
+    return <p className="text-sm text-[var(--muted)]">Loading available slots...</p>;
   }
 
   if (error) {
@@ -48,7 +48,7 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold text-slate-700">Choose an available slot</p>
+      <p className="text-sm font-semibold text-[var(--foreground)]">Choose an available slot</p>
       <ul className="space-y-2">
         {availableSlots.map((slot) => {
           const start = new Date(`${slot.date}T${slot.startTime}`);
@@ -71,14 +71,14 @@ export default function SlotSelector({ onSelect, selectedSlotId }: Props) {
                 type="button"
                 className={`w-full rounded-xl border px-4 py-3 text-left transition ${
                   selectedSlotId === slot.id
-                    ? 'border-indigo-600 bg-indigo-50'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                    ? 'border-[var(--primary)] bg-[var(--primary-soft)]'
+                    : 'border-[color:var(--border)] bg-[var(--surface)] hover:bg-[var(--primary-soft)]'
                 }`}
                 onClick={() => onSelect(slot)}
               >
                 <div className="flex items-center justify-between">
-                          <span className="font-medium text-slate-900">{label}</span>
-                  <span className="text-xs text-slate-500">
+                          <span className="font-medium text-[var(--foreground)]">{label}</span>
+                  <span className="text-xs text-[var(--muted)]">
                     {slot.isBooked ? 'Full' : 'Available'}
                   </span>
                 </div>
