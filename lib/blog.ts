@@ -1,11 +1,8 @@
 import type { BlogPost } from '../types/blog';
 
 const author = {
-  name: 'Dr. Maya Perez',
+  name: 'Chetana Adawadkar',
   bio: 'Clinical psychologist specializing in cognitive-behavioral therapy and mindfulness-based approaches. Passionate about helping clients build resilience and find balance.',
-  avatarUrl: '/images/authors/maya-perez.jpg',
-  twitterHandle: 'drmayaperez',
-  website: 'https://mindcare.example.com',
 };
 
 const posts: BlogPost[] = [
