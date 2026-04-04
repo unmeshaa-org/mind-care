@@ -10,10 +10,6 @@ type BlogRow = {
   publish_date?: string;
   published: boolean;
   author_name?: string;
-  author_bio?: string;
-  author_avatar_url?: string;
-  author_twitter_handle?: string;
-  author_website?: string;
   tags?: string[];
   content?: string;
 };
@@ -31,10 +27,6 @@ function mapRowToPost(row: BlogRow): BlogPost {
     published: row.published,
     author: {
       name: row.author_name,
-      bio: row.author_bio,
-      avatarUrl: row.author_avatar_url,
-      twitterHandle: row.author_twitter_handle,
-      website: row.author_website,
     },
     tags: row.tags,
     content: typeof row.content === 'string' 
@@ -104,10 +96,6 @@ export async function createBlog(post: Partial<BlogPost>) {
     publish_date: post.publishDate,
     published: post.published ?? false,
     author_name: post.author?.name,
-    author_bio: post.author?.bio,
-    author_avatar_url: post.author?.avatarUrl,
-    author_twitter_handle: post.author?.twitterHandle,
-    author_website: post.author?.website,
     tags: post.tags,
     content: post.content,
   })
@@ -136,10 +124,6 @@ export async function updateBlog(slug: string, updates: Partial<BlogPost>) {
       publish_date: updates.publishDate,
       published: updates.published,
       author_name: updates.author?.name,
-      author_bio: updates.author?.bio,
-      author_avatar_url: updates.author?.avatarUrl,
-      author_twitter_handle: updates.author?.twitterHandle,
-      author_website: updates.author?.website,
       tags: updates.tags,
       content: updates.content,
     })

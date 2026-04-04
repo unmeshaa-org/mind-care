@@ -1,9 +1,5 @@
 export type BlogAuthor = {
   name: string;
-  bio: string;
-  avatarUrl?: string;
-  twitterHandle?: string;
-  website?: string;
 };
 
 export type BlogPostSection =
